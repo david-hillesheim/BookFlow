@@ -8,7 +8,7 @@ O objetivo principal não é apenas entregar um software funcionando, mas sim ap
 ---
 
 ## 🚀 Como o projeto está sendo conduzido (Fases de Desenvolvimento)
-O desenvolvimento foi estruturado em **5 Fases evolutivas**. Atualmente o projeto encontra-se na **Fase 1
+O desenvolvimento foi estruturado em **5 Fases evolutivas**. Atualmente o projeto encontra-se na **Fase 1**
 
 * **Fase 1: Setup e Integração Inicial (Spring Boot & SQL)**
   Criação da API RESTful básica, mapeamento de entidades com JPA/Hibernate e configuração do banco de dados relacional.
