@@ -56,6 +56,7 @@ Antes de começar, você vai precisar ter instalado em sua máquina as seguintes
 ### 1. Clonando o repositório
 ```bash
 git clone [https://github.com/](https://github.com/)<seu-usuario>/<nome-do-repositorio>.git
+
 2. Configurando o Banco de Dados
 Crie um banco de dados no seu SGBD local chamado <nome-do-banco>.
 
@@ -65,6 +66,7 @@ Properties
 spring.datasource.url=jdbc:postgresql://localhost:5432/<nome-do-banco>
 spring.datasource.username=<seu-usuario-do-banco>
 spring.datasource.password=<sua-senha>
+
 3. Rodando o Back-end
 Pelo terminal, acesse a pasta raiz do projeto back-end e execute:
 
