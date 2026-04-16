@@ -24,8 +24,8 @@ public class Book {
     private String isbn;
 
     @Column(name = "total_copies", nullable = false)
-    private int totalCopies;
+    private Integer totalCopies;
 
     @Column(name = "available_copies", nullable = false)
-    private int availableCopies;
+    private Integer availableCopies;
 }
