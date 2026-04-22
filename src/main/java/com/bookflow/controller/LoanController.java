@@ -19,12 +19,17 @@ public class LoanController {
         return loanService.registerLoan(loan);
     }
 
-    @PutMapping ("/{id}/return")
+    @PostMapping ("/{id}/return")
     public Loan returnLoan(@PathVariable Long id) {
         return loanService.returnLoan(id);
     }
 
     @GetMapping
+    public List<Loan> findAllLoans() {
+        return loanService.findAllLoans();
+    }
+
+    @GetMapping("/overdue")
     public List<Loan> findOverdueLoans() {
         return loanService.findOverdueLoans();
     }

@@ -7,6 +7,7 @@ import com.bookflow.model.enums.LoanStatus;
 import com.bookflow.repository.LoanRepository;
 import com.bookflow.service.BookService;
 import com.bookflow.service.LoanService;
+import com.bookflow.service.MemberService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,11 +30,14 @@ public class LoanServiceTest {
     @Mock
     private LoanRepository loanRepository;
 
-    @InjectMocks
-    private LoanService loanService;
-
     @Mock
     private BookService bookService;
+
+    @Mock
+    private MemberService memberService;
+
+    @InjectMocks
+    private LoanService loanService;
 
     @Test
     public void mustCalculateCorrectlyFineWhenLate() {

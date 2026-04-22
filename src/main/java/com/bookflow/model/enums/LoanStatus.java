@@ -11,7 +11,6 @@ public enum LoanStatus {
 
     private final String description;
 
-    @JsonValue
     public String getDescription() {
         return description;
     }
