@@ -79,4 +79,8 @@ public class LoanService {
                 LocalDate.now()
         );
     }
+
+    public List<Loan> getLoanMemberHistory(Long id) {
+        return loanRepository.findByMemberId(id);
+    }
 }

@@ -28,4 +28,9 @@ public class LoanController {
     public List<Loan> findOverdueLoans() {
         return loanService.findOverdueLoans();
     }
+
+    @GetMapping ("/member/{id}")
+    public List<Loan> getLoanMemberHistory(@PathVariable Long id) {
+        return loanService.getLoanMemberHistory(id);
+    }
 }

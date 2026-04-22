@@ -11,4 +11,7 @@ import java.util.List;
 @Repository
 public interface LoanRepository extends JpaRepository<Loan, Long> {
     List<Loan> findByLoanStatusAndExpectedReturnDateBefore(LoanStatus status, LocalDate date);
+
+    // Returns all Loans associated with member ID
+    List<Loan> findByMemberId(Long memberId);
 }
