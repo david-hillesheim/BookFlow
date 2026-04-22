@@ -26,12 +26,11 @@ public class LoanService {
 
     @Transactional
     public Loan registerLoan(Loan loan) {
-
         Book book = bookRepository.findById(loan.getBook().getId())
                 .orElseThrow(() -> new RuntimeException("Nenhum livro encontrado para o id:" + loan.getBook().getId()));
         Member member = memberRepository.findById(loan.getMember().getId())
                 .orElseThrow(() -> new RuntimeException("Nenhum membro encontrado para o id: " + loan.getMember().getId()));
-        // There is no need to verify if the member or book exists, as this is already done in the service.
+
         if (book.getAvailableCopies() <= 0){
             throw new RuntimeException("O livro não possui nenhuma cópia disponível!");
         }

@@ -4,7 +4,9 @@ import com.bookflow.model.Book;
 import com.bookflow.model.Loan;
 import com.bookflow.model.Member;
 import com.bookflow.model.enums.LoanStatus;
+import com.bookflow.repository.BookRepository;
 import com.bookflow.repository.LoanRepository;
+import com.bookflow.repository.MemberRepository;
 import com.bookflow.service.BookService;
 import com.bookflow.service.LoanService;
 import com.bookflow.service.MemberService;
@@ -27,17 +29,17 @@ import java.util.Optional;
 @ExtendWith(MockitoExtension.class)
 public class LoanServiceTest {
 
+    @InjectMocks
+    private LoanService loanService;
+
     @Mock
     private LoanRepository loanRepository;
 
     @Mock
-    private BookService bookService;
+    private BookRepository bookRepository;
 
     @Mock
-    private MemberService memberService;
-
-    @InjectMocks
-    private LoanService loanService;
+    private MemberRepository memberRepository;
 
     @Test
     public void mustCalculateCorrectlyFineWhenLate() {
@@ -53,7 +55,7 @@ public class LoanServiceTest {
 
         Mockito.when(loanRepository.findById(1L)).thenReturn(Optional.of(loan));
         Mockito.when(loanRepository.save(any(Loan.class))).thenAnswer(i -> i.getArguments()[0]);
-        Mockito.when(bookService.findBookById(1L)).thenReturn(book);
+        Mockito.when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
 
         // Act
         Loan loanWithFine = loanService.returnLoan(loan.getId());
