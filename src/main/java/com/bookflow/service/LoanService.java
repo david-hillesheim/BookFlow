@@ -35,7 +35,6 @@ public class LoanService {
             throw new RuntimeException("O livro não possui nenhuma cópia disponível!");
         }
 
-        // There is no need to update the book because of the Transactional Annotation
         book.setAvailableCopies(book.getAvailableCopies() - 1);
 
         loan.setBook(book);
