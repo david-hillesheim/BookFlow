@@ -21,10 +21,10 @@ O projeto está estruturado em **5 fases evolutivas**:
 - ✅ **Fase 1: Setup e Integração Inicial**  
   Criação da API RESTful, mapeamento de entidades com JPA/Hibernate e integração com banco de dados.
 
-- 🔄 **Fase 2: Lógica e Regras de Negócio (Atual)**  
+- 🔄 **Fase 2: Lógica e Regras de Negócio**  
   Implementação de validações robustas e regras de negócio na camada de Service.
 
-- ⏳ **Fase 3: Clean Code e Arquitetura**  
+- ⏳ **Fase 3: Clean Code e Arquitetura (Atual)**  
   Refatoração, uso de DTOs e tratamento global de exceções.
 
 - ⏳ **Fase 4: Segurança da API**  
