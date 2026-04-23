@@ -1,89 +1,110 @@
-# BookFlow
+# 📚 BookFlow
 
 ## 📖 Sobre o Projeto
-Este projeto é uma aplicação web Full-Stack desenvolvida como um laboratório prático para consolidar conhecimentos em desenvolvimento back-end com **Java e Spring Boot**, evoluindo até a integração com um front-end moderno.
+O **BookFlow** é uma aplicação web Full-Stack desenvolvida como laboratório prático para consolidar conhecimentos em desenvolvimento back-end com **Java e Spring Boot**, evoluindo progressivamente até a integração com um front-end moderno.
 
-O objetivo principal não é apenas entregar um software funcionando, mas sim aplicar gradativamente as melhores práticas de mercado, como **Clean Code, princípios SOLID, segurança de APIs e arquitetura em camadas**. O projeto simula um ambiente de trabalho real, onde a arquitetura do sistema evolui fase a fase.
+Mais do que entregar um software funcional, o foco do projeto é aplicar boas práticas de mercado, incluindo:
 
----
+- Clean Code  
+- Princípios SOLID  
+- Arquitetura em camadas  
+- Segurança de APIs  
 
-## 🚀 Como o projeto está sendo conduzido (Fases de Desenvolvimento)
-O desenvolvimento foi estruturado em **5 Fases evolutivas**. Atualmente o projeto encontra-se na **Fase 1**
-
-* **Fase 1: Setup e Integração Inicial (Spring Boot & SQL)**
-  Criação da API RESTful básica, mapeamento de entidades com JPA/Hibernate e configuração do banco de dados relacional.
-* **Fase 2: Lógica e Regras de Negócio**
-  Implementação de validações robustas e fluxos de decisão complexos isolados na camada de Service.
-* **Fase 3: Clean Code e Arquitetura**
-  Refatoração do código, separação estrita de responsabilidades, uso de DTOs (Data Transfer Objects) e tratamento global de exceções.
-* **Fase 4: Segurança da API**
-  Configuração de CORS e implementação de Spring Security com autenticação e autorização via JWT (JSON Web Tokens).
-* **Fase 5: Front-end (Next.js / React)**
-  Desenvolvimento da interface de usuário consumindo a API de forma segura e gerenciando estados e tokens de acesso.
+O projeto simula um ambiente real de desenvolvimento, com evolução incremental da arquitetura a cada fase.
 
 ---
 
-## 🛠️ Tecnologias e Frameworks Utilizados
+## 🚀 Fases de Desenvolvimento
 
-### Back-end
-* **Linguagem:** Java (Versão 21)
-* **Framework Principal:** Spring Boot (4.0.5)
-* **Acesso a Dados:** Spring Data JPA
-* **Banco de Dados:** PostgreSQL
-* **Segurança:** Spring Security & JWT
-* **Ferramentas:** Lombok, Maven
+O projeto está estruturado em **5 fases evolutivas**:
 
-### Front-end (Fase 5)
-* **Framework:** Next.js / React
-* **Estilização:** Tailwind CSS
-* **Integração de API:** Axios
+- ✅ **Fase 1: Setup e Integração Inicial**  
+  Criação da API RESTful, mapeamento de entidades com JPA/Hibernate e integração com banco de dados.
 
----
+- 🔄 **Fase 2: Lógica e Regras de Negócio (Atual)**  
+  Implementação de validações robustas e regras de negócio na camada de Service.
 
-## ⚙️ Pré-requisitos para rodar o projeto localmente
+- ⏳ **Fase 3: Clean Code e Arquitetura**  
+  Refatoração, uso de DTOs e tratamento global de exceções.
 
-Antes de começar, você vai precisar ter instalado em sua máquina as seguintes ferramentas:
-* [Java JDK](https://www.oracle.com/java/technologies/downloads/) (21)
-* [Maven](https://maven.apache.org/)
-* [PostgreSQL](https://www.postgresql.org/download/)
-* [Node.js e NPM](https://nodejs.org/) (Para o Front-end)
-* Uma IDE de sua preferência (IntelliJ IDEA, VS Code, etc.)
+- ⏳ **Fase 4: Segurança da API**  
+  Implementação de CORS, autenticação e autorização com JWT.
+
+- ⏳ **Fase 5: Front-end**  
+  Desenvolvimento da interface com React/Next.js e integração com a API.
 
 ---
 
-## 🏃 Como rodar a aplicação
+## 🛠️ Tecnologias Utilizadas
 
-### 1. Clonando o repositório
+### 🔙 Back-end
+- Java 21  
+- Spring Boot 3.4.1  
+- Spring Data JPA  
+- PostgreSQL (Supabase)  
+- Maven  
+- Lombok  
+
+### 🎨 Front-end (Futuro)
+- Next.js / React  
+- Tailwind CSS  
+- Axios  
+
+---
+
+## ⚙️ Pré-requisitos
+
+Antes de rodar o projeto, você precisa ter instalado:
+
+- Java JDK 21  
+- Maven  
+- Node.js e NPM *(necessário apenas na Fase 5)*  
+- IDE (IntelliJ, VS Code, etc.)  
+
+---
+
+## 🏃 Como Rodar a Aplicação
+
+### 1. Clonar o repositório
 ```bash
-git clone [https://github.com/](https://github.com/)<seu-usuario>/<nome-do-repositorio>.git
+git clone https://github.com/david-hillesheim/BookFlow
+```
 
-2. Configurando o Banco de Dados
-Crie um banco de dados no seu SGBD local chamado <nome-do-banco>.
+### 2. Configurar variáveis de ambiente
 
-Acesse o arquivo src/main/resources/application.properties (ou .yml) e atualize as credenciais de acesso:
+O banco de dados está hospedado no Supabase. Configure as seguintes variáveis de ambiente:
+```bash
+DB_URL=jdbc:postgresql://aws-1-us-east-1.pooler.supabase.com:6543/postgres?prepareThreshold=0
+DB_USERNAME=postgres.torvyxktjroqkpzgibpg
+DB_PASSWORD=5xethvu2zaFshArg
+```
+No application.properties, utilize:
+```bash
+spring.datasource.url=${DB_URL}
+spring.datasource.username=${DB_USERNAME}
+spring.datasource.password=${DB_PASSWORD}
+```
 
-Properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/<nome-do-banco>
-spring.datasource.username=<seu-usuario-do-banco>
-spring.datasource.password=<sua-senha>
-
-3. Rodando o Back-end
-Pelo terminal, acesse a pasta raiz do projeto back-end e execute:
-
-Bash
+### 3. Rodar o Back-end
+```bash
 mvn spring-boot:run
-A API estará rodando em http://localhost:8080
+```
+A API estará disponível em:
+```bash
+http://localhost:8080
+```
+### 4. Rodar o Front-end
 
-4. Rodando o Front-end (Em breve)
-(Instruções serão adicionadas na Fase 5)
+(Disponível a partir da Fase 5)
 
 👨‍💻 Autor
-David Hillesheim
 
+David Hillesheim
 Estudante de Desenvolvimento de Software
 
 LinkedIn: https://www.linkedin.com/in/david-hillesheim-3b6b8a320/
 
-E-mail: davidhillesheim6@gmail.com
+Email: davidhillesheim6@gmail.com
 
-⭐ Se este projeto te ajudou ou inspirou de alguma forma, sinta-se à vontade para deixar uma estrela no repositório!
+⭐ Se este projeto te ajudou ou inspirou, considere deixar uma estrela no repositório!
+
