@@ -1,5 +1,7 @@
 package com.bookflow.controller;
 
+import com.bookflow.dto.request.MemberRequest;
+import com.bookflow.dto.response.MemberResponse;
 import com.bookflow.model.Member;
 import com.bookflow.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -16,23 +18,24 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping
-    public Member registerMember(@RequestBody Member member){
-        return memberService.registerMember(member);
+    @ResponseStatus(HttpStatus.CREATED)
+    public MemberResponse registerMember(@RequestBody MemberRequest memberRequest){
+        return memberService.registerMember(memberRequest);
     }
 
     @GetMapping
-    public List<Member> listAllMembers() {
+    public List<MemberResponse> listAllMembers() {
         return memberService.listAllMembers();
     }
 
     @GetMapping("/{id}")
-    public Member findMemberById(@PathVariable Long id) {
+    public MemberResponse findMemberById(@PathVariable Long id) {
         return memberService.findMemberById(id);
     }
 
     @PutMapping("/{id}")
-    public Member updateMember(@PathVariable Long id, @RequestBody Member member) {
-        return memberService.updateMember(id, member);
+    public MemberResponse updateMember(@PathVariable Long id, @RequestBody MemberRequest memberRequest) {
+        return memberService.updateMember(id, memberRequest);
     }
 
     @DeleteMapping("/{id}")

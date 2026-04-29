@@ -2,7 +2,6 @@ package com.bookflow.controller;
 
 import com.bookflow.dto.request.BookRequest;
 import com.bookflow.dto.response.BookResponse;
-import com.bookflow.model.Book;
 import com.bookflow.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +17,7 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public BookResponse registerBook(@RequestBody BookRequest bookRequest) {
         return bookService.registerBook(bookRequest);
     }
@@ -33,8 +33,8 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public BookResponse updateBook(@PathVariable Long id, @RequestBody Book book) {
-        return bookService.updateBook(id, book);
+    public BookResponse updateBook(@PathVariable Long id, @RequestBody BookRequest bookRequest) {
+        return bookService.updateBook(id, bookRequest);
     }
 
     @DeleteMapping("/{id}")

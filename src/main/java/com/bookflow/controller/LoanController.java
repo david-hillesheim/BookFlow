@@ -1,8 +1,11 @@
 package com.bookflow.controller;
 
+import com.bookflow.dto.request.LoanRequest;
+import com.bookflow.dto.response.LoanResponse;
 import com.bookflow.model.Loan;
 import com.bookflow.service.LoanService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,27 +18,28 @@ public class LoanController {
     private final LoanService loanService;
 
     @PostMapping
-    public Loan registerLoan(@RequestBody Loan loan){
-        return loanService.registerLoan(loan);
+    @ResponseStatus(HttpStatus.CREATED)
+    public LoanResponse registerLoan(@RequestBody LoanRequest loanRequest){
+        return loanService.registerLoan(loanRequest);
     }
 
     @PostMapping ("/{id}/return")
-    public Loan returnLoan(@PathVariable Long id) {
+    public LoanResponse returnLoan(@PathVariable Long id) {
         return loanService.returnLoan(id);
     }
 
     @GetMapping
-    public List<Loan> findAllLoans() {
+    public List<LoanResponse> findAllLoans() {
         return loanService.findAllLoans();
     }
 
     @GetMapping("/overdue")
-    public List<Loan> findOverdueLoans() {
+    public List<LoanResponse> findOverdueLoans() {
         return loanService.findOverdueLoans();
     }
 
     @GetMapping ("/member/{id}")
-    public List<Loan> getLoanMemberHistory(@PathVariable Long id) {
+    public List<LoanResponse> getLoanMemberHistory(@PathVariable Long id) {
         return loanService.getLoanMemberHistory(id);
     }
 }

@@ -1,5 +1,6 @@
 package com.bookflow;
 
+import com.bookflow.dto.response.LoanResponse;
 import com.bookflow.model.Book;
 import com.bookflow.model.Loan;
 import com.bookflow.model.Member;
@@ -56,10 +57,10 @@ public class LoanServiceTest {
         Mockito.when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
 
         // Act
-        Loan loanWithFine = loanService.returnLoan(loan.getId());
+        LoanResponse loanWithFine = loanService.returnLoan(loan.getId());
 
         // Assert
-        assertEquals(new BigDecimal("10.00"), loanWithFine.getFine());
+        assertEquals(new BigDecimal("10.00"), loanWithFine.fine());
     }
 
     @Test

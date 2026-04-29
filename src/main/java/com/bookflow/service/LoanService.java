@@ -1,5 +1,7 @@
 package com.bookflow.service;
 
+import com.bookflow.dto.request.LoanRequest;
+import com.bookflow.dto.response.LoanResponse;
 import com.bookflow.exception.BusinessException;
 import com.bookflow.exception.ResourceNotFoundException;
 import com.bookflow.model.Book;
@@ -27,18 +29,17 @@ public class LoanService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Loan registerLoan(Loan loan) {
-        Book book = bookRepository.findById(loan.getBook().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Nenhum livro encontrado para o id:" + loan.getBook().getId()));
-        Member member = memberRepository.findById(loan.getMember().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Nenhum membro encontrado para o id: " + loan.getMember().getId()));
+    public LoanResponse registerLoan(LoanRequest loanRequest) {
+        Book book = bookRepository.findById(loanRequest.bookId())
+                .orElseThrow(() -> new ResourceNotFoundException("Nenhum livro encontrado para o id:" + loanRequest.bookId()));
+        Member member = memberRepository.findById(loanRequest.memberId())
+                .orElseThrow(() -> new ResourceNotFoundException("Nenhum membro encontrado para o id: " + loanRequest.memberId()));
 
         if (book.getAvailableCopies() <= 0){
             throw new BusinessException("O livro não possui nenhuma cópia disponível!");
         }
 
-        book.setAvailableCopies(book.getAvailableCopies() - 1);
-
+        Loan loan = new Loan();
         loan.setBook(book);
         loan.setMember(member);
         loan.setLoanDate(LocalDate.now());
@@ -46,11 +47,24 @@ public class LoanService {
         loan.setLoanStatus(LoanStatus.ACTIVE);
         loan.setFine(BigDecimal.ZERO);
 
-        return loanRepository.save(loan);
+        loan = loanRepository.save(loan);
+
+        book.setAvailableCopies(book.getAvailableCopies() - 1);
+
+        return new LoanResponse(
+                loan.getId(),
+                book.getId(),
+                member.getId(),
+                loan.getLoanDate(),
+                loan.getExpectedReturnDate(),
+                loan.getActualReturnDate(),
+                loan.getLoanStatus(),
+                loan.getFine()
+        );
     }
 
     @Transactional
-    public Loan returnLoan(Long id){
+    public LoanResponse returnLoan(Long id){
 
         Loan existingLoan = loanRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Empréstimo não encontrado para o id: " + id));
@@ -75,21 +89,42 @@ public class LoanService {
                 .orElseThrow(() -> new ResourceNotFoundException("Nenhum livro encontrado para o id:" + existingLoan.getBook().getId()));
         loanBook.setAvailableCopies(loanBook.getAvailableCopies() + 1);
 
-        return loanRepository.save(existingLoan);
+        return new LoanResponse(
+                existingLoan.getId(),
+                loanBook.getId(),
+                existingLoan.getMember().getId(),
+                existingLoan.getLoanDate(),
+                existingLoan.getExpectedReturnDate(),
+                existingLoan.getActualReturnDate(),
+                existingLoan.getLoanStatus(),
+                existingLoan.getFine()
+        );
     }
 
-    public List<Loan> findOverdueLoans() {
+    public List<LoanResponse> findOverdueLoans() {
         return loanRepository.findByLoanStatusAndExpectedReturnDateBefore(
                 LoanStatus.ACTIVE,
                 LocalDate.now()
         );
     }
 
-    public List<Loan> findAllLoans() {
-        return loanRepository.findAll();
+    public List<LoanResponse> findAllLoans() {
+        return loanRepository.findAll()
+                .stream()
+                .map(loan -> new LoanResponse(
+                        loan.getId(),
+                        loan.getBook().getId(),
+                        loan.getMember().getId(),
+                        loan.getLoanDate(),
+                        loan.getExpectedReturnDate(),
+                        loan.getActualReturnDate(),
+                        loan.getLoanStatus(),
+                        loan.getFine()
+                ))
+                .toList();
     }
 
-    public List<Loan> getLoanMemberHistory(Long id) {
+    public List<LoanResponse> getLoanMemberHistory(Long id) {
         return loanRepository.findByMemberId(id);
     }
 }

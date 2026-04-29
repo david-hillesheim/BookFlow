@@ -1,5 +1,6 @@
 package com.bookflow.repository;
 
+import com.bookflow.dto.response.LoanResponse;
 import com.bookflow.model.Loan;
 import com.bookflow.model.enums.LoanStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,8 +11,8 @@ import java.util.List;
 
 @Repository
 public interface LoanRepository extends JpaRepository<Loan, Long> {
-    List<Loan> findByLoanStatusAndExpectedReturnDateBefore(LoanStatus status, LocalDate date);
+    List<LoanResponse> findByLoanStatusAndExpectedReturnDateBefore(LoanStatus status, LocalDate date);
 
     // Returns all Loans associated with member ID
-    List<Loan> findByMemberId(Long memberId);
+    List<LoanResponse> findByMemberId(Long memberId);
 }

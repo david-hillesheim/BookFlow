@@ -1,5 +1,7 @@
 package com.bookflow.service;
 
+import com.bookflow.dto.request.MemberRequest;
+import com.bookflow.dto.response.MemberResponse;
 import com.bookflow.exception.ResourceNotFoundException;
 import com.bookflow.model.Member;
 import com.bookflow.repository.MemberRepository;
@@ -15,35 +17,73 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public Member registerMember(Member member) {
+    public MemberResponse registerMember(MemberRequest memberRequest) {
+        Member member = new Member();
+
+        member.setName(memberRequest.name());
+        member.setEmail(memberRequest.email());
+        member.setPhone(memberRequest.phone());
         member.setRegistrationDate(LocalDate.now());
-        return memberRepository.save(member);
+
+        member = memberRepository.save(member);
+
+        return new MemberResponse(
+                member.getId(),
+                member.getName(),
+                member.getEmail(),
+                member.getPhone(),
+                member.getRegistrationDate()
+        );
     }
 
-    public List<Member> listAllMembers() {
-        return memberRepository.findAll();
+    public List<MemberResponse> listAllMembers() {
+        return memberRepository.findAll()
+                .stream()
+                .map(member -> new MemberResponse(
+                        member.getId(),
+                        member.getName(),
+                        member.getEmail(),
+                        member.getPhone(),
+                        member.getRegistrationDate()
+                ))
+                .toList();
     }
 
-    public Member findMemberById(Long id) {
-        return memberRepository.findById(id)
+    public MemberResponse findMemberById(Long id) {
+        Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Membro não encontrado para o id: " + id));
+        return new MemberResponse(
+                member.getId(),
+                member.getName(),
+                member.getEmail(),
+                member.getPhone(),
+                member.getRegistrationDate()
+        );
     }
 
-    public Member updateMember(Long id, Member memberDetails) {
+    public MemberResponse updateMember(Long id, MemberRequest memberDetails) {
         Member existingMember = memberRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Membro não encontrado para o id: " + id));
 
-        if (memberDetails.getEmail() != null) {
-            existingMember.setEmail(memberDetails.getEmail());
+        if (memberDetails.email() != null) {
+            existingMember.setEmail(memberDetails.email());
         }
-        if (memberDetails.getName() != null) {
-            existingMember.setName(memberDetails.getName());
+        if (memberDetails.name() != null) {
+            existingMember.setName(memberDetails.name());
         }
-        if (memberDetails.getPhone() != null) {
-            existingMember.setPhone(memberDetails.getPhone());
+        if (memberDetails.phone() != null) {
+            existingMember.setPhone(memberDetails.phone());
         }
 
-        return memberRepository.save(existingMember);
+        memberRepository.save(existingMember);
+
+        return new MemberResponse(
+                existingMember.getId(),
+                existingMember.getName(),
+                existingMember.getEmail(),
+                existingMember.getPhone(),
+                existingMember.getRegistrationDate()
+        );
     }
 
     public void deleteMember(Long id){
