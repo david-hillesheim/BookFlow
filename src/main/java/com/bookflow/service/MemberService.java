@@ -1,5 +1,6 @@
 package com.bookflow.service;
 
+import com.bookflow.exception.ResourceNotFoundException;
 import com.bookflow.model.Member;
 import com.bookflow.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,12 +26,12 @@ public class MemberService {
 
     public Member findMemberById(Long id) {
         return memberRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Membro não encontrado para o id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Membro não encontrado para o id: " + id));
     }
 
     public Member updateMember(Long id, Member memberDetails) {
         Member existingMember = memberRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Membro não encontrado para o id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Membro não encontrado para o id: " + id));
 
         if (memberDetails.getEmail() != null) {
             existingMember.setEmail(memberDetails.getEmail());
@@ -47,7 +48,7 @@ public class MemberService {
 
     public void deleteMember(Long id){
         if (!memberRepository.existsById(id)) {
-            throw new RuntimeException("Membro não encontrado para o id: " + id);
+            throw new ResourceNotFoundException("Membro não encontrado para o id: " + id);
         }
         memberRepository.deleteById(id);
     }

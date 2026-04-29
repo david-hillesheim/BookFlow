@@ -1,5 +1,7 @@
 package com.bookflow.service;
 
+import com.bookflow.exception.BusinessException;
+import com.bookflow.exception.ResourceNotFoundException;
 import com.bookflow.model.Book;
 import com.bookflow.model.Loan;
 import com.bookflow.model.Member;
@@ -27,12 +29,12 @@ public class LoanService {
     @Transactional
     public Loan registerLoan(Loan loan) {
         Book book = bookRepository.findById(loan.getBook().getId())
-                .orElseThrow(() -> new RuntimeException("Nenhum livro encontrado para o id:" + loan.getBook().getId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Nenhum livro encontrado para o id:" + loan.getBook().getId()));
         Member member = memberRepository.findById(loan.getMember().getId())
-                .orElseThrow(() -> new RuntimeException("Nenhum membro encontrado para o id: " + loan.getMember().getId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Nenhum membro encontrado para o id: " + loan.getMember().getId()));
 
         if (book.getAvailableCopies() <= 0){
-            throw new RuntimeException("O livro não possui nenhuma cópia disponível!");
+            throw new BusinessException("O livro não possui nenhuma cópia disponível!");
         }
 
         book.setAvailableCopies(book.getAvailableCopies() - 1);
@@ -51,10 +53,10 @@ public class LoanService {
     public Loan returnLoan(Long id){
 
         Loan existingLoan = loanRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Empréstimo não encontrado para o id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Empréstimo não encontrado para o id: " + id));
 
         if (existingLoan.getLoanStatus() == LoanStatus.RETURNED) {
-            throw new RuntimeException("Empréstimo já devolvido!");
+            throw new BusinessException("Empréstimo já devolvido!");
         }
 
         existingLoan.setActualReturnDate(LocalDate.now());
@@ -70,7 +72,7 @@ public class LoanService {
 
         existingLoan.setLoanStatus(LoanStatus.RETURNED);
         Book loanBook = bookRepository.findById(existingLoan.getBook().getId())
-                .orElseThrow(() -> new RuntimeException("Nenhum livro encontrado para o id:" + existingLoan.getBook().getId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Nenhum livro encontrado para o id:" + existingLoan.getBook().getId()));
         loanBook.setAvailableCopies(loanBook.getAvailableCopies() + 1);
 
         return loanRepository.save(existingLoan);

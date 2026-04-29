@@ -1,5 +1,8 @@
 package com.bookflow.service;
 
+import com.bookflow.dto.request.BookRequest;
+import com.bookflow.dto.response.BookResponse;
+import com.bookflow.exception.ResourceNotFoundException;
 import com.bookflow.model.Book;
 import com.bookflow.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,41 +16,85 @@ public class BookService {
 
     private final BookRepository bookRepository;
 
-    public Book registerBook(Book book) {
-        return bookRepository.save(book);
+    public BookResponse registerBook(BookRequest bookRequest) {
+        Book book = new Book();
+
+        book.setTitle(bookRequest.title());
+        book.setAuthor(bookRequest.author());
+        book.setIsbn(bookRequest.isbn());
+        book.setTotalCopies(bookRequest.totalCopies());
+        book.setAvailableCopies(book.getTotalCopies());
+
+        Book savedBook = bookRepository.save(book);
+
+        return new BookResponse(
+                savedBook.getId(),
+                savedBook.getTitle(),
+                savedBook.getAuthor(),
+                savedBook.getIsbn(),
+                savedBook.getTotalCopies(),
+                savedBook.getAvailableCopies()
+        );
     }
 
-    public List<Book> listAllBooks() {
-        return bookRepository.findAll();
+    public List<BookResponse> listAllBooks() {
+        return bookRepository.findAll()
+                .stream()
+                .map(book -> new BookResponse(
+                        book.getId(),
+                        book.getTitle(),
+                        book.getAuthor(),
+                        book.getIsbn(),
+                        book.getTotalCopies(),
+                        book.getAvailableCopies()
+                ))
+                .toList();
     }
 
-    public Book findBookById(Long id) {
-        return bookRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Livro não encontrado para o id: " + id));
+    public BookResponse findBookById(Long id) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Livro não encontrado para o id: " + id));
+        return new BookResponse(
+                book.getId(),
+                book.getTitle(),
+                book.getAuthor(),
+                book.getIsbn(),
+                book.getTotalCopies(),
+                book.getAvailableCopies()
+        );
     }
 
-    public Book updateBook(Long id, Book bookDetails) {
+    public BookResponse updateBook(Long id, BookRequest bookDetails) {
         Book existingBook = bookRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Livro não encontrado para o id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Livro não encontrado para o id: " + id));
 
-        if (bookDetails.getTitle() != null) {
-            existingBook.setTitle(bookDetails.getTitle());
+        if (bookDetails.title() != null) {
+            existingBook.setTitle(bookDetails.title());
         }
 
-        if (bookDetails.getAuthor() != null) {
-            existingBook.setAuthor(bookDetails.getAuthor());
+        if (bookDetails.author() != null) {
+            existingBook.setAuthor(bookDetails.author());
         }
 
-        if (bookDetails.getTotalCopies() != null) {
-            existingBook.setTotalCopies(bookDetails.getTotalCopies());
+        if (bookDetails.totalCopies() != null) {
+            existingBook.setTotalCopies(bookDetails.totalCopies());
         }
 
-        return bookRepository.save(existingBook);
+        Book updatedBook = bookRepository.save(existingBook);
+
+        return new BookResponse(
+                updatedBook.getId(),
+                updatedBook.getTitle(),
+                updatedBook.getAuthor(),
+                updatedBook.getIsbn(),
+                updatedBook.getTotalCopies(),
+                updatedBook.getAvailableCopies()
+        );
     }
 
     public void deleteBookById(Long id) {
         if (!bookRepository.existsById(id)){
-            throw new RuntimeException("Não foi possível encontrar livro para o id: " + id);
+            throw new ResourceNotFoundException("Não foi possível encontrar livro para o id: " + id);
         }
         bookRepository.deleteById(id);
     }
