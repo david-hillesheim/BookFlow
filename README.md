@@ -24,10 +24,10 @@ O projeto está estruturado em **5 fases evolutivas**:
 - 🔄 **Fase 2: Lógica e Regras de Negócio**  
   Implementação de validações robustas e regras de negócio na camada de Service.
 
-- ⏳ **Fase 3: Clean Code e Arquitetura (Atual)**  
+- ⏳ **Fase 3: Clean Code e Arquitetura**  
   Refatoração, uso de DTOs e tratamento global de exceções.
 
-- ⏳ **Fase 4: Segurança da API**  
+- ⏳ **Fase 4: Segurança da API (Atual)**  
   Implementação de CORS, autenticação e autorização com JWT.
 
 - ⏳ **Fase 5: Front-end**  
