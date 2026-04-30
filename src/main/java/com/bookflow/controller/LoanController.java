@@ -2,7 +2,6 @@ package com.bookflow.controller;
 
 import com.bookflow.dto.request.LoanRequest;
 import com.bookflow.dto.response.LoanResponse;
-import com.bookflow.model.Loan;
 import com.bookflow.service.LoanService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

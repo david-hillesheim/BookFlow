@@ -2,7 +2,6 @@ package com.bookflow.controller;
 
 import com.bookflow.dto.request.MemberRequest;
 import com.bookflow.dto.response.MemberResponse;
-import com.bookflow.model.Member;
 import com.bookflow.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

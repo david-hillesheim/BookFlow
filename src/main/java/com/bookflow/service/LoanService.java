@@ -47,14 +47,16 @@ public class LoanService {
         loan.setLoanStatus(LoanStatus.ACTIVE);
         loan.setFine(BigDecimal.ZERO);
 
-        loan = loanRepository.save(loan);
-
         book.setAvailableCopies(book.getAvailableCopies() - 1);
+
+        loan = loanRepository.save(loan);
 
         return new LoanResponse(
                 loan.getId(),
                 book.getId(),
+                book.getTitle(),
                 member.getId(),
+                member.getName(),
                 loan.getLoanDate(),
                 loan.getExpectedReturnDate(),
                 loan.getActualReturnDate(),
@@ -85,14 +87,14 @@ public class LoanService {
         }
 
         existingLoan.setLoanStatus(LoanStatus.RETURNED);
-        Book loanBook = bookRepository.findById(existingLoan.getBook().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Nenhum livro encontrado para o id:" + existingLoan.getBook().getId()));
-        loanBook.setAvailableCopies(loanBook.getAvailableCopies() + 1);
+        existingLoan.getBook().setAvailableCopies(existingLoan.getBook().getAvailableCopies() + 1);
 
         return new LoanResponse(
                 existingLoan.getId(),
-                loanBook.getId(),
+                existingLoan.getBook().getId(),
+                existingLoan.getBook().getTitle(),
                 existingLoan.getMember().getId(),
+                existingLoan.getMember().getName(),
                 existingLoan.getLoanDate(),
                 existingLoan.getExpectedReturnDate(),
                 existingLoan.getActualReturnDate(),
@@ -104,8 +106,21 @@ public class LoanService {
     public List<LoanResponse> findOverdueLoans() {
         return loanRepository.findByLoanStatusAndExpectedReturnDateBefore(
                 LoanStatus.ACTIVE,
-                LocalDate.now()
-        );
+                LocalDate.now())
+                .stream()
+                .map(loan -> new LoanResponse(
+                        loan.getId(),
+                        loan.getBook().getId(),
+                        loan.getBook().getTitle(),
+                        loan.getMember().getId(),
+                        loan.getMember().getName(),
+                        loan.getLoanDate(),
+                        loan.getExpectedReturnDate(),
+                        loan.getActualReturnDate(),
+                        loan.getLoanStatus(),
+                        loan.getFine()
+                ))
+                .toList();
     }
 
     public List<LoanResponse> findAllLoans() {
@@ -114,7 +129,9 @@ public class LoanService {
                 .map(loan -> new LoanResponse(
                         loan.getId(),
                         loan.getBook().getId(),
+                        loan.getBook().getTitle(),
                         loan.getMember().getId(),
+                        loan.getMember().getName(),
                         loan.getLoanDate(),
                         loan.getExpectedReturnDate(),
                         loan.getActualReturnDate(),
@@ -125,6 +142,20 @@ public class LoanService {
     }
 
     public List<LoanResponse> getLoanMemberHistory(Long id) {
-        return loanRepository.findByMemberId(id);
+        return loanRepository.findLoansByMemberId(id)
+                .stream()
+                .map(loan -> new LoanResponse(
+                        loan.getId(),
+                        loan.getBook().getId(),
+                        loan.getBook().getTitle(),
+                        loan.getMember().getId(),
+                        loan.getMember().getName(),
+                        loan.getLoanDate(),
+                        loan.getExpectedReturnDate(),
+                        loan.getActualReturnDate(),
+                        loan.getLoanStatus(),
+                        loan.getFine()
+                ))
+                .toList();
     }
 }
